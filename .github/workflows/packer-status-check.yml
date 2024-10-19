@@ -1,0 +1,61 @@
+name: Packer status check workflow
+
+on:
+  pull_request:
+    branches:
+      - main
+ 
+jobs:
+  test:
+    name: Packer Workflow
+    runs-on: ubuntu-latest
+    env:
+      HOST: ${{secrets.HOST }}
+      PORT: ${{secrets.PORT}}
+      USER: ${{ secrets.USER }}
+      PASSWORD: ${{ secrets.PASSWORD }}
+      DATABASE: ${{ secrets.DATABASE }}
+      DIALECT: ${{secrets.DIALECT}}
+      AWS_ACCESS_KEY_ID: ${{secrets.AWS_ACCESS_KEY_ID}}
+      AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
+      ASSG_NAME: ${{secrets.ASSG_NAME}}
+      AWS_REGION: ${{secrets.AWS_REGION}}
+      BCRYPT_SALT_ROUNDS: ${{secrets.BCRYPT_SALT_ROUNDS}}
+      INSTANCE_TYPE: ${{secrets.INSTANCE_TYPE}}
+      SSH_USERNAME: ${{secrets.SSH_USERNAME}}
+      SUBNET_ID: ${{secrets.SUBNET_ID}}
+      VPC_ID: ${{secrets.VPC_ID}}
+ 
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+ 
+      - name: Install Packer
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y unzip
+          curl -LO https://releases.hashicorp.com/packer/1.11.2/packer_1.11.2_linux_amd64.zip
+          unzip packer_1.11.2_linux_amd64.zip
+          sudo mv packer /usr/local/bin/
+          packer --version
+ 
+      - name: Initialize packer
+        run: |
+          packer init .
+        shell: bash
+
+      - name: Create webapp.zip from existing directory
+        run: |
+          zip -r webapp.zip .
+        shell: bash
+      
+      - name: Format packer
+        run: |
+          packer fmt -check .
+        continue-on-error: false
+        shell: bash
+        
+      - name: Validate Packer
+        run: |
+          packer validate .
+        shell: bash

@@ -1,0 +1,50 @@
+name: Webapp Test Workflow
+ 
+# Run this workflow on pull requests to main branch
+on:
+  pull_request:
+    branches:
+      - main
+ 
+jobs:
+  test:
+    name: Webapp Tests
+    runs-on: ubuntu-latest
+ 
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+ 
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "22.2.0"
+ 
+      - name: Install dependencies
+        run: npm install
+ 
+      - name: Install PostgreSQL
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y postgresql postgresql-contrib
+ 
+      # Step 5: Start PostgreSQL service and create or update the test database user
+      - name: Set up PostgreSQL
+        run: |
+          sudo service postgresql start
+          sudo -u postgres psql -c "CREATE USER ${{ secrets.USER }} WITH PASSWORD '${{ secrets.PASSWORD }}';"
+          sudo -u postgres psql -c "CREATE DATABASE ${{ secrets.DATABASE }};"
+          sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE ${{ secrets.DATABASE }} TO ${{ secrets.USER }};"
+          sudo -u postgres psql -c "ALTER DATABASE ${{ secrets.DATABASE }} OWNER TO ${{ secrets.USER }};"
+ 
+        # Step 6: Run the tests
+      - name: Run tests
+        env:
+          HOST: ${{secrets.HOST }}
+          PORT: ${{secrets.PORT}}
+          USER: ${{ secrets.USER }}
+          PASSWORD: ${{ secrets.PASSWORD }}
+          DATABASE: ${{ secrets.DATABASE }}
+          DIALECT: ${{secrets.DIALECT}}
+          BCRYPT_SALT_ROUNDS: ${{secrets.BCRYPT_SALT_ROUNDS}}
+        run: npm test
