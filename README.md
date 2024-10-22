@@ -2,13 +2,13 @@
 This branch has branch protection rule activated. Please run the status checks before PR merge.
 This branch has packer template to create AMI for EC2 instance
 
-## Pre-requisites
+## Pre-requisites:
 - Install latest Node.js. Verify the versions using below commands:
     - node -v
     - npm -v
 - Install latest PostgreSQL
 
-## Installation
+## Installation:
 - Clone the repository using git command: `git clone git@github.com:csye6225-palsayan/webapp.git`
 - Navigate to `webapp` directory using git CLI (git bash): `cd webapp`
 - Install dependencies (dotenv, express, sequelize, pg, pg-hstore, bcryptjs) using git command: `npm install`
@@ -42,7 +42,7 @@ This branch has packer template to create AMI for EC2 instance
         
     
 
-## Authenticated API Endpoints (Basic Auth Required)
+## Authenticated API Endpoints (Basic Auth Required):
     -   URL: /v1/user/self
     -   Method: GET
     -   Description: Retrieves the user's account information. The response payload will include all fields for the user except for the password.
@@ -55,7 +55,7 @@ This branch has packer template to create AMI for EC2 instance
         -   Password
         -   The account_updated field is updated automatically upon successful update.
 
-## To create AMI from packer template
+## To create AMI from packer template:
 - Install Packer and run below commands
     - `packer init .`
     - `packer fmt .`
