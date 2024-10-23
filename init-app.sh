@@ -1,8 +1,8 @@
 sudo groupadd csye6225
 sudo useradd csye6225 --shell /usr/sbin/nologin -g csye6225
 sudo cp /tmp/csye6225-aws.service /etc/systemd/system/
-sudo cp /tmp/webapp.zip /opt/webapp
-sudo unzip /opt/webapp.zip -d /opt/webapp/
+sudo cp /tmp/webapp.zip /opt/
+sudo unzip /opt/webapp.zip -d /opt/webapp
 cd /opt/webapp/
 env_values=$(cat <<END
 HOST=$HOST
