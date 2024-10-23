@@ -42,7 +42,7 @@ This branch has packer template to create AMI for EC2 instance
         
     
 
-## Authenticated API Endpoints (Basic Auth Required)
+## Authenticated API Endpoints (Basic Auth Required):
     -   URL: /v1/user/self
     -   Method: GET
     -   Description: Retrieves the user's account information. The response payload will include all fields for the user except for the password.
